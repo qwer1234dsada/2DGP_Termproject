@@ -16,6 +16,8 @@ name = "MainState"
 klrby = None
 grasses = None
 monsteres = None
+monsteres1 = None
+
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -75,6 +77,9 @@ def enter():
     monsteres = Monster()
     game_world.add_object(monsteres, 1)
 
+    global monsteres1
+    monsteres1 = Monster()
+    game_world.add_object(monsteres1, 1)
 
 def exit():
     game_world.clear()
@@ -110,6 +115,13 @@ def update():
 
     if collide_another(klrby,grasses):
         klrby.fallstop()
+
+    if collide_swallow(klrby,monsteres1):
+        monsteres1.swallow()
+
+    if collide_swallow_finish(klrby,monsteres1):
+        monsteres1.swallow_finish()
+        klrby.swallow_finish()
 
     if collide_swallow(klrby,monsteres):
         monsteres.swallow()

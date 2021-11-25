@@ -33,6 +33,11 @@ key_event_table = {
 }
 
 # klrby States
+global global_klrby_x
+global_klrby_x = 0
+
+global global_klrby_y
+global_klrby_y = 0
 
 class IdleState:
 
@@ -236,6 +241,7 @@ class Klrby:
             return self.x - 20, self.y - 25, self.x + 20, self.y + 15
         else:
             return 0,0,0,0
+
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -255,6 +261,12 @@ class Klrby:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
+        global global_klrby_x
+        global global_klrby_y
+
+        global_klrby_x = self.x
+        global_klrby_y = self.y
 
     def draw(self):
         self.cur_state.draw(self)

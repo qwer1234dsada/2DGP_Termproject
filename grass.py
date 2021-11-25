@@ -34,6 +34,8 @@ class Grass:
             return 0,50,365,62
         elif -30 < klrby.Camera_movex < 266:
             return 790,50,850,80
+        elif 301 < klrby.Camera_movex < 320:
+            return 780,50,820,110
         else:
             return 10,10,10,10
 
@@ -48,6 +50,10 @@ class Grass:
             return 790,50,830,120
         elif 80 < klrby.Camera_movex < 87:
             return 770,50,800,120
+        elif 265 < klrby.Camera_movex < 280:
+            return 780,50,820,140
+        elif 301 < klrby.Camera_movex < 303:
+            return 780,50,790,140
         else:
             return 10,10,10,10
 
@@ -58,5 +64,9 @@ class Grass:
             return 410,50,800,60
         elif 40 < klrby.Camera_movex < 87:
             return 790, 50, 850, 130
+        elif 267 < klrby.Camera_movex < 300:
+            return 780,50,820,150
+        elif 321 < klrby.Camera_movex < 767:
+            return 780,50,820,80
         else:
             return 10,10,10,10
