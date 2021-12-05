@@ -1,6 +1,8 @@
 from pico2d import *
 
 import klrby
+import game_framework
+import boss_state
 from klrby import Camera_movex
 colidetype = 0
 
@@ -36,6 +38,12 @@ class Grass:
             return 790,50,850,80
         elif 301 < klrby.Camera_movex < 320:
             return 780,50,820,110
+        elif 770 < klrby.Camera_movex < 791:
+            return 780,50,820,160
+        elif 890 < klrby.Camera_movex < 910:
+            return 880,50,910,160
+        elif 1486 < klrby.Camera_movex < 1600:
+            return 1486,50,1600,120
         else:
             return 10,10,10,10
 
@@ -54,6 +62,8 @@ class Grass:
             return 780,50,820,140
         elif 301 < klrby.Camera_movex < 303:
             return 780,50,790,140
+        elif 765 < klrby.Camera_movex < 775:
+            return 790,50,800,140
         else:
             return 10,10,10,10
 
@@ -66,7 +76,21 @@ class Grass:
             return 790, 50, 850, 130
         elif 267 < klrby.Camera_movex < 300:
             return 780,50,820,150
-        elif 321 < klrby.Camera_movex < 767:
+        elif 321 < klrby.Camera_movex < 780:
             return 780,50,820,80
+        elif 790 < klrby.Camera_movex < 889:
+            return 780,50,880,100
+        elif 921 < klrby.Camera_movex < 1500:
+            return 921,50,1500,80
         else:
             return 10,10,10,10
+
+    def get_bb_move_bossstage(self):
+        if 1529 < klrby.Camera_movex < 1570:
+            return 1529,50,1570,200
+        else:
+            return 999,999,999,999
+
+    def move_to_boss_stage(self):
+        if klrby.enter_bossroom == 1:
+            game_framework.change_state(boss_state)

@@ -4,14 +4,13 @@ import klrby
 import game_world
 import game_framework
 
-class Monster:
+class Monster2:
     image = None
 
     def __init__(self):
-        if Monster.image == None:
-            Monster.image = load_image('knight.png')
-            Monster.image2 = load_image('fire.png')
-        self.x, self.y = 1000, 110
+        if Monster2.image == None:
+            Monster2.image = load_image('fire.png')
+        self.x, self.y = 900, 110
         self.movecount = 1000
         self.moveflag = 0
         self.swallow_suck = 0
@@ -113,9 +112,9 @@ class Monster:
 
                     self.trun_amount += 0.1
                     self.move_amount += 0.1
+
         else:
             pass
-        print("sssssssssssssssssssssssssss : %d" %klrby.global_klrby_x)
 
     def update(self):
         if self.moveflag == 0:
@@ -131,17 +130,13 @@ class Monster:
         if self.movecount == 0:
             self.moveflag = 1
 
-        print("movecount = %d" %self.movecount)
-
     def swallow(self):
         self.swallow_suck = 1
 
     def swallow_finish(self):
-        print("_________________________________________________________swallow")
         self.swallow_finish_type = 1
 
     def get_dead(self):
-        print("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd %d" %klrby.klrby_attack_state)
         self.x = 0
         self.y = 1000
 

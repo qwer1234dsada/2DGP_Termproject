@@ -1,5 +1,6 @@
 import game_framework
 from pico2d import *
+import dead_state
 import Camera
 from monster import Monster
 import game_world
@@ -18,8 +19,12 @@ FRAMES_PER_ACTION = 8
 
 global Camera_movex
 Camera_movex = 0
+global klrby_attack_state
+klrby_attack_state = 0
+global enter_bossroom
+enter_bossroom = 0
 # klrby Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, E_DOWN, R_DOWN, MOUSE_ATTACK = range(8)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, E_DOWN, R_DOWN, MOUSE_ATTACK, F_DOWN = range(9)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -29,6 +34,7 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_SPACE): SPACE,
     (SDL_KEYDOWN, SDLK_e): E_DOWN,
     (SDL_KEYDOWN, SDLK_r): R_DOWN,
+    (SDL_KEYDOWN, SDLK_f): F_DOWN,
     (SDL_KEYDOWN, SDLK_q): MOUSE_ATTACK,
 }
 
@@ -63,6 +69,8 @@ class IdleState:
         if klrby.swallow_change == 1:
             if event == MOUSE_ATTACK:
                 klrby.attack_on = 1
+        if event == F_DOWN:
+            klrby.enter_check = 1
 
     def do(klrby):
         klrby.frame = (klrby.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
@@ -137,9 +145,16 @@ class RunState:
         if klrby.swallow_change == 1:
             if event == MOUSE_ATTACK:
                 klrby.attack_on = 1
+        if event == F_DOWN:
+            klrby.enter_check = 1
+        else:
+            klrby.enter_check = 0
+
 
     def do(klrby):
         global Camera_movex
+        global klrby_attack_state
+        klrby_attack_state = klrby.attack_on
         klrby.frame = (klrby.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         if klrby.colide == 0:
             Camera_movex += klrby.velocity * game_framework.frame_time
@@ -157,6 +172,8 @@ class RunState:
             klrby.swallow_fool = 0
 
         klrby.x = clamp(25, klrby.x, 1600 - 25)
+
+
 
     def draw(klrby):
         print("colide : %d" %klrby.colide)
@@ -188,8 +205,8 @@ class RunState:
                     klrby.count = 0
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, E_DOWN: IdleState, R_DOWN: IdleState, MOUSE_ATTACK:IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState, E_DOWN: RunState, R_DOWN: RunState, MOUSE_ATTACK:RunState},
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, E_DOWN: IdleState, R_DOWN: IdleState, MOUSE_ATTACK:IdleState, F_DOWN: IdleState},
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState, E_DOWN: RunState, R_DOWN: RunState, MOUSE_ATTACK:RunState, F_DOWN: RunState},
 }
 
 class Klrby:
@@ -217,9 +234,16 @@ class Klrby:
         self.swallow_change = 0
         self.attack_on = 0
         self.count = 0
+        self.enter_check = 0
 
     def get_bb(self):
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
+
+    def get_bb_dead(self):
+        if (self.swallow_on == 1 or self.swallow_on == 1):
+            return 0,0,0,0
+        else:
+            return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def get_bb_block(self):
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
@@ -241,6 +265,18 @@ class Klrby:
             return self.x - 20, self.y - 25, self.x + 20, self.y + 15
         else:
             return 0,0,0,0
+
+    def get_bb_attack(self):
+        if self.attack_on == 1:
+            if self.dir == 1:
+                return self.x - 20, self.y - 30, self.x + 100, self.y + 30
+            elif self.dir == -1:
+                return self.x - 100, self.y - 30, self.x + 20, self.y + 30
+        else:
+            return 0,0,0,0
+
+    def get_bb_move_bossstage(self):
+        return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -264,7 +300,8 @@ class Klrby:
 
         global global_klrby_x
         global global_klrby_y
-
+        global enter_bossroom
+        enter_bossroom = self.enter_check
         global_klrby_x = self.x
         global_klrby_y = self.y
 
@@ -275,6 +312,7 @@ class Klrby:
         draw_rectangle(*self.get_bb_block())
         draw_rectangle(*self.get_bb_swallow())
         draw_rectangle(*self.get_bb_swallow_finish())
+        draw_rectangle(*self.get_bb_attack())
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
@@ -304,3 +342,6 @@ class Klrby:
 
     def swallow_finish(self):
         self.swallow_fool = 1
+
+    def dead(self):
+        game_framework.change_state(dead_state)
