@@ -173,8 +173,6 @@ class RunState:
 
         klrby.x = clamp(25, klrby.x, 1600 - 25)
 
-
-
     def draw(klrby):
         print("colide : %d" %klrby.colide)
         if klrby.swallow_change == 0:
@@ -249,6 +247,12 @@ class Klrby:
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def get_bb_another(self):
+        return self.x - 20, self.y - 25, self.x + 20, self.y + 15
+
+    def get_bb_jump(self):
+        return self.x - 20, self.y - 25, self.x + 20, self.y + 15
+
+    def get_bb_hammer(self):
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def get_bb_swallow(self):

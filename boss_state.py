@@ -10,12 +10,14 @@ import main_state
 from klrby import *
 from monster import *
 from bossland import *
+from boss import *
 
 name = "Bossstate"
 image = None
 logo_time = 0.0
 klrby = None
 boss_terrain = None
+boss = None
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -26,6 +28,34 @@ def collide(a, b):
     if bottom_a > top_b: return False
     return True
 
+def collide_attack(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb_attack()
+    left_b, bottom_b, right_b, top_b = b.get_bb_attack()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+def collide_jump(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb_jump()
+    left_b, bottom_b, right_b, top_b = b.get_bb_jump()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+def collide_hammer(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb_hammer()
+    left_b, bottom_b, right_b, top_b = b.get_bb_hammer()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+
 def enter():
     global image
     global klrby
@@ -34,11 +64,14 @@ def enter():
     klrby.x,klrby.y = 100,50
     klrby.dir = 1
     klrby.velocity = 0
-
+    klrby.swallow_change = 1
     global boss_terrain
     boss_terrain = Bossland()
     game_world.add_object(boss_terrain, 0)
 
+    global boss
+    boss = Boss()
+    game_world.add_object(boss,1)
     image = load_image('boss_background.png')
 
 def exit():
@@ -55,6 +88,14 @@ def update():
     if collide(klrby,boss_terrain):
         klrby.fallstop()
 
+    if collide_attack(klrby,boss):
+        boss.get_damaged()
+
+    if collide_jump(klrby,boss):
+        klrby.dead()
+
+    if collide_hammer(klrby,boss):
+        klrby.dead()
 
 def draw():
     global image
@@ -62,7 +103,6 @@ def draw():
     image.draw(800,400)
     for game_object in game_world.all_objects():
         game_object.draw()
-    update_canvas()
     update_canvas()
     pass
 
