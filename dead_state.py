@@ -9,7 +9,7 @@ logo_time = 0.0
 
 def enter():
     global image
-    image = load_image('youdiead.jpg')
+    image = load_image('youdiead.png')
     pass
 
 
@@ -32,7 +32,7 @@ def update():
 def draw():
     global image
     clear_canvas()
-    image.draw(800,400)
+    image.draw(800,300)
     update_canvas()
 
 
