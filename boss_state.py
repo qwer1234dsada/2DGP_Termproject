@@ -55,6 +55,14 @@ def collide_hammer(a, b):
     if bottom_a > top_b: return False
     return True
 
+def collide_fire(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb_fire()
+    left_b, bottom_b, right_b, top_b = b.get_bb_fire()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
 
 def enter():
     global image
@@ -95,6 +103,9 @@ def update():
         klrby.dead()
 
     if collide_hammer(klrby,boss):
+        klrby.dead()
+
+    if collide_fire(klrby,boss):
         klrby.dead()
 
 def draw():

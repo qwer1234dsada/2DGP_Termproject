@@ -101,9 +101,19 @@ class IdleState:
                     klrby.image3.clip_draw(210, 0, 30, 40, klrby.x, klrby.y + 10, 50, 70)
             elif klrby.attack_on == 1:
                 if klrby.dir == 1:
-                    klrby.image4.clip_composite_draw(int(klrby.frame) * 40, 10, 110, 60, 3.14, 'v',klrby.x, klrby.y + 10, 120, 80)
+                    if 0 <= klrby.frame < 4:
+                        klrby.image5.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
+                    elif 4 <= klrby.frame < 7:
+                        klrby.image6.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
+                    else:
+                        klrby.image7.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
                 else:
-                    klrby.image4.clip_draw(int(klrby.frame) * 40, 10, 110, 60, klrby.x, klrby.y + 10, 120, 80)
+                    if 0 <= klrby.frame < 4:
+                        klrby.image5.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
+                    elif 4 <= klrby.frame < 7:
+                        klrby.image6.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
+                    else:
+                        klrby.image7.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
                 klrby.count += 1
                 if klrby.count == 200:
                     klrby.attack_on = 0
@@ -194,9 +204,19 @@ class RunState:
                     klrby.image3.clip_draw(int(klrby.frame) * 30, 0, 30, 40, klrby.x, klrby.y + 10, 50, 70)
             elif klrby.attack_on == 1:
                 if klrby.dir == 1:
-                    klrby.image4.clip_composite_draw(int(klrby.frame) * 40, 10, 110, 60, 3.14, 'v',klrby.x, klrby.y + 10, 120, 80)
+                    if 0 <= klrby.frame < 4:
+                        klrby.image5.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
+                    elif 4 <= klrby.frame < 7:
+                        klrby.image6.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
+                    else:
+                        klrby.image7.clip_composite_draw(0, 0, 80, 60, 3.14, 'v',klrby.x + 10, klrby.y , 100, 85)
                 else:
-                    klrby.image4.clip_draw(int(klrby.frame) * 40, 10, 110, 60, klrby.x, klrby.y + 10, 120, 80)
+                    if 0 <= klrby.frame < 4:
+                        klrby.image5.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
+                    elif 4 <= klrby.frame < 7:
+                        klrby.image6.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
+                    else:
+                        klrby.image7.clip_draw(0, 0, 80, 60, klrby.x - 10, klrby.y , 100, 85)
                 klrby.count += 1
                 if klrby.count == 200:
                     klrby.attack_on = 0
@@ -215,6 +235,9 @@ class Klrby:
         self.image2 = load_image('klrby_swallow_animation.png')
         self.image3 = load_image('klrby_sword_animation.png')
         self.image4 = load_image('klrby_sword_attack_animation.png')
+        self.image5 = load_image('klrby_sword_attack_animation0.png')
+        self.image6 = load_image('klrby_sword_attack_animation1.png')
+        self.image7 = load_image('klrby_sword_attack_animation2.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.velocity = 0
@@ -253,6 +276,9 @@ class Klrby:
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def get_bb_hammer(self):
+        return self.x - 20, self.y - 25, self.x + 20, self.y + 15
+
+    def get_bb_fire(self):
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
 
     def get_bb_swallow(self):
