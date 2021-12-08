@@ -109,7 +109,6 @@ class Boss:
 
         if self.dead_animation > 300:
             game_framework.change_state(end_state)
-            self.boss_bgm.stop()
 
         output_dead_timer = self.dead_animation
 
@@ -148,5 +147,5 @@ class Boss:
 
     def get_damaged(self):
         if self.get_damaged_delay == 0:
-            self.hp -= 100
+            self.hp -= 50
             self.get_damaged_delay -= 1
