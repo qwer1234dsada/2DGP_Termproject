@@ -10,8 +10,8 @@ class Monster2:
     def __init__(self):
         if Monster2.image == None:
             Monster2.image = load_image('fire.png')
-        self.x, self.y = 900, 110
-        self.movecount = 1000
+        self.x, self.y = 1800, 110
+        self.movecount = 1300
         self.moveflag = 0
         self.swallow_suck = 0
         self.trun_amount = 0
@@ -86,12 +86,12 @@ class Monster2:
     def draw(self):
         if self.type == 0:
             if self.swallow_finish_type == 0:
-                if self.moveflag == 1:
+                if self.moveflag == 0:
                     if klrby.Camera_movex > 0 and klrby.Camera_movex < 800:
                         self.image.clip_draw(0, 0, 30, 24, self.x - ( klrby.Camera_movex * 2 ), self.y, 50, 50)
                     else:
                         self.image.clip_draw(0, 0, 30, 24, self.x, self.y, 50, 50)
-                elif self.moveflag == 0:
+                elif self.moveflag == 1:
                     if klrby.Camera_movex > 0 and klrby.Camera_movex < 800:
                         self.image.clip_composite_draw(0, 0, 30, 24, -3.14, 'v', self.x - ( klrby.Camera_movex * 2 ), self.y, 50, 50)
                     else:
@@ -118,13 +118,13 @@ class Monster2:
 
     def update(self):
         if self.moveflag == 0:
-            self.x += 0.2
+            self.x -= 0.2
             self.movecount -= 1
         elif self.moveflag == 1:
-            self.x -= 0.2
+            self.x += 0.2
             self.movecount += 1
 
-        if self.movecount == 1000:
+        if self.movecount == 1300:
             self.moveflag = 0
 
         if self.movecount == 0:

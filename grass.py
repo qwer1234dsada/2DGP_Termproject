@@ -11,6 +11,9 @@ class Grass:
     def __init__(self, x = 500, y = 500):
         self.image = load_image('klrby_background.png')
         self.x, self.y = x, y
+        self.bgm = load_music('bgm_music.wav')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
     def update(self):
         pass
@@ -94,3 +97,4 @@ class Grass:
     def move_to_boss_stage(self):
         if klrby.enter_bossroom == 1:
             game_framework.change_state(boss_state)
+            self.bgm.stop()

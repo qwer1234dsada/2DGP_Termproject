@@ -108,6 +108,7 @@ def update():
     if collide_fire(klrby,boss):
         klrby.dead()
 
+
 def draw():
     global image
     clear_canvas()

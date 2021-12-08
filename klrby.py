@@ -256,6 +256,9 @@ class Klrby:
         self.attack_on = 0
         self.count = 0
         self.enter_check = 0
+        self.sword_sound = load_wav('sword_sound.wav')
+        self.sword_sound.set_volume(64)
+
 
     def get_bb(self):
         return self.x - 20, self.y - 25, self.x + 20, self.y + 15
@@ -334,6 +337,10 @@ class Klrby:
         enter_bossroom = self.enter_check
         global_klrby_x = self.x
         global_klrby_y = self.y
+
+        if self.attack_on == 1:
+            self.sword_sound.play()
+
 
     def draw(self):
         self.cur_state.draw(self)

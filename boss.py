@@ -3,6 +3,9 @@ from pico2d import *
 import klrby
 import game_world
 import game_framework
+import end_state
+global output_dead_timer
+output_dead_timer = 0
 
 class Boss:
     image = None
@@ -21,7 +24,7 @@ class Boss:
             Boss.image5 = load_image('boss_dead_image.png')
             Boss.image6 = load_image('fire_effect.png')
         self.x, self.y = 1200, 50
-        self.random_skill = 3
+        self.random_skill = 0
         self.hp = 1000
         self.skill_delay = 0
         self.frame = 0
@@ -31,6 +34,9 @@ class Boss:
         self.paturn_delay = 0
         self.get_damaged_delay = 0
         self.dead_animation = 0
+        self.boss_bgm = load_wav('boss_bgm.wav')
+        self.boss_bgm.set_volume(64)
+        self.boss_bgm.repeat_play()
 
     def draw(self):
         if self.hp >= 0:
@@ -52,6 +58,7 @@ class Boss:
         draw_rectangle(*self.get_bb_fire())
 
     def update(self):
+        global output_dead_timer
         if self.get_damaged_delay == -1:
             self.get_damaged_delay = 100
 
@@ -100,6 +107,12 @@ class Boss:
         if self.hp < 1:
             self.dead_animation += 0.09
 
+        if self.dead_animation > 300:
+            game_framework.change_state(end_state)
+            self.boss_bgm.stop()
+
+        output_dead_timer = self.dead_animation
+
     def get_dead(self):
         pass
 
@@ -118,7 +131,7 @@ class Boss:
     def get_bb_jump(self):
         if self.random_skill == 2:
             if self.jump_count > 300:
-                return 0, 0, 1800, 20
+                return 0, 0, 1800, 40
             else:
                 return 0, 1000, 0, 1000
         else:
@@ -135,5 +148,5 @@ class Boss:
 
     def get_damaged(self):
         if self.get_damaged_delay == 0:
-            self.hp -= 10
+            self.hp -= 100
             self.get_damaged_delay -= 1
